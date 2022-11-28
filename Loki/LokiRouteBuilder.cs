@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace log4net.Appender.Loki
+﻿namespace log4net.Appender.Loki
 {
     public static class LokiRouteBuilder
     {
@@ -12,6 +7,6 @@ namespace log4net.Appender.Loki
             return host.Substring(host.Length - 1) != "/" ? $"{host}{PostDataUri}" : $"{host.TrimEnd('/')}{PostDataUri}";
         }
 
-        public const string PostDataUri = "/api/prom/push";
+        public const string PostDataUri = "/loki/api/v1/push";
     }
 }

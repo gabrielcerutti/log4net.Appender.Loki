@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace log4net.Appender.Loki
@@ -13,9 +10,9 @@ namespace log4net.Appender.Loki
     {
         protected readonly HttpClient HttpClient;
 
-        public LokiHttpClient(bool trustSelfCignedCerts)
+        public LokiHttpClient(bool trustSelfSignedCerts)
         {
-            if (trustSelfCignedCerts)
+            if (trustSelfSignedCerts)
             {
                 var handler = new WebRequestHandler();
                 handler.ServerCertificateValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) =>

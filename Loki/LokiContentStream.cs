@@ -1,47 +1,15 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace log4net.Appender.Loki
 {
-    using System.Collections.Generic;
-    using System.Text;
-    using Labels;
-    using Newtonsoft.Json;
-
     internal class LokiContentStream
     {
-        [JsonIgnore]
-        public List<LokiLabel> Labels { get; } = new List<LokiLabel>();
+        [JsonProperty("stream")]
+        public Dictionary<string, string> Labels { get; set; } = new Dictionary<string, string>();
 
-        [JsonProperty("labels")]
-        public string LabelsString
-        {
-            get
-            {
-                StringBuilder sb = new StringBuilder("{");
-                bool firstLabel = true;
-                foreach (LokiLabel label in Labels)
-                {
-                    if (firstLabel)
-                        firstLabel = false;
-                    else
-                        sb.Append(",");
-
-                    sb.Append(label.Key);
-                    sb.Append("=\"");
-                    sb.Append(label.Value);
-                    sb.Append("\"");
-                }
-
-                sb.Append("}");
-                return sb.ToString();
-            }
-        }
-
-
-        [JsonProperty("entries")]
-        public List<LokiEntry> Entries { get; set; } = new List<LokiEntry>();
+        [JsonProperty("values")]
+        public List<string[]> Values { get; set; } = new List<string[]>();
     }
 }
