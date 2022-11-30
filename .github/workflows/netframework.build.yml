@@ -19,8 +19,8 @@ jobs:
     - name: Restore NuGet Packages
       run: nuget restore log4net.Appender.Loki.sln
     
-    - name: Setup MSBuild Path
-      uses: warrenbuckley/Setup-MSBuild@v1
+    - name: Setup-msbuild
+      uses: microsoft/setup-msbuild@v1.1.3
     
     - name: Build
       run: msbuild log4net.Appender.Loki.csproj /p:Configuration=Release
