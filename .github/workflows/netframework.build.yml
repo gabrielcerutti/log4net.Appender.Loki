@@ -12,9 +12,9 @@ jobs:
     steps:
     - name: Checkout the repository
       uses: actions/checkout@master
-   
+      
     - name: Setup NuGet
-      uses: NuGet/setup-nuget@v1.0.2
+      uses: NuGet/setup-nuget@v1.1.1
      
     - name: Restore NuGet Packages
       run: nuget restore log4net.Appender.Loki.sln
