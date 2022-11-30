@@ -6,11 +6,11 @@ This appender will allow log4net to be configured to send log messages to Loki d
 
 ## Installation
 
-The log4net.Appender.LokiAppender NuGet [package can be found here](https://www.nuget.org/packages/log4net.Appender.Loki/). Alternatively you can install it via one of the following commands below:
+The Log4net.Appender.Grafana.Loki NuGet [package can be found here](https://www.nuget.org/packages/Log4net.Appender.Grafana.Loki/). Alternatively you can install it via one of the following commands below:
 
 NuGet command:
 ```bash
-Install-Package Log4Net.Appender.Loki
+Install-Package Log4Net.Appender.Grafana.Loki
 ```
 
 ## Log4net configuration
