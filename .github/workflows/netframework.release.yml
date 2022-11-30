@@ -1,4 +1,4 @@
-name: Dot Net Framework 4.8 (Release)
+name: Dot Net Framework (Release)
 
 on:
    push:
