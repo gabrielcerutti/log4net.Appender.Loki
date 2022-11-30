@@ -7,7 +7,7 @@
     <ProjectGuid>{D2DD78D6-396A-4F1E-8D5E-0F7D4F8463EB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>log4net.Appender.Loki</RootNamespace>
+    <RootNamespace>Log4Net.Appender.Loki</RootNamespace>
     <AssemblyName>Log4Net.Appender.Grafana.Loki</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

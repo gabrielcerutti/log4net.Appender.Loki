@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace log4net.Appender.Loki
+namespace Log4Net.Appender.Loki
 {
     internal class LokiEntry
     {

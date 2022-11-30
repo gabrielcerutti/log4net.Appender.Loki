@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace log4net.Appender.Loki
+namespace Log4Net.Appender.Loki
 {
     public class LokiHttpClient
     {

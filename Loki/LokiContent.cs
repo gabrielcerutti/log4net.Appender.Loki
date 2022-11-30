@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace log4net.Appender.Loki
+namespace Log4Net.Appender.Loki
 {
     internal class LokiContent
     {

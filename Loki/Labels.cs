@@ -1,4 +1,4 @@
-﻿namespace log4net.Appender.Loki
+﻿namespace Log4Net.Appender.Loki
 {
     public class LokiLabel
     {

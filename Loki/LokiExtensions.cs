@@ -1,6 +1,6 @@
 ﻿using log4net.Core;
 
-namespace log4net.Appender.Loki
+namespace Log4Net.Appender.Loki
 {
     internal static class LogEventLevelExtensions
     {

@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace log4net.Appender.Loki
+namespace Log4Net.Appender.Loki
 {
     internal class LokiBatchFormatter
     {

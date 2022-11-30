@@ -1,12 +1,12 @@
-# log4net Loki Appender
+# Log4Net Grafana Loki Appender
 
-This appender will allow log4net to be configured to send log messages to Loki directly.
+This appender will allow *log4net* to be configured to send log messages to Loki directly.
 
 [![Dot Net Framework 4.6.2 (Build)](https://github.com/gabrielcerutti/log4net.Appender.Loki/actions/workflows/netframework.build.yml/badge.svg)](https://github.com/gabrielcerutti/log4net.Appender.Loki/actions/workflows/netframework.build.yml)
 
 ## Installation
 
-The Log4net.Appender.Grafana.Loki NuGet [package can be found here](https://www.nuget.org/packages/Log4net.Appender.Grafana.Loki/). Alternatively you can install it via one of the following commands below:
+The *Log4net.Appender.Grafana.Loki* NuGet [package can be found here](https://www.nuget.org/packages/Log4net.Appender.Grafana.Loki/). Alternatively you can install it via one of the following commands below:
 
 NuGet command:
 ```bash
@@ -19,7 +19,7 @@ Sample Log4net config:
 
 ```xml
 <log4net>
-  <appender name="loki" type="log4net.Appender.LokiAppender, log4net.Appender.Loki">
+  <appender name="loki" type="Log4Net.Appender.LokiAppender, Log4Net.Appender.Grafana.Loki">
     <Environment value="Development" /> <!-- Global label to be added to the log stream -->
     <Application value="WebApp" /> <!-- Global label to be added to the log stream -->
     <BufferSize  value="3" /> <!-- To configure the buffer size, default: 512 -->

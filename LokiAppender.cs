@@ -1,11 +1,12 @@
-﻿using log4net.Core;
+﻿using log4net.Appender;
+using log4net.Core;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
 using System.Text;
 
-namespace log4net.Appender.Loki
+namespace Log4Net.Appender.Loki
 {
     public class LokiAppender : BufferingAppenderSkeleton
     {
