@@ -1,4 +1,4 @@
-name: Dot Net Framework 4.6.2 (Build)
+name: Dot Net Framework 4.8 (Build)
 
 on:
    push:
