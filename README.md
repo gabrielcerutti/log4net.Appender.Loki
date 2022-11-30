@@ -2,7 +2,7 @@
 
 This appender will allow log4net to be configured to send log messages to Loki directly.
 
-![Dot Net Framework 4 (Build)](https://github.com/gabrielcerutti/log4net.Appender.Loki/workflows/Dot%20Net%20Framework%204%20(Build)/badge.svg?branch=master)
+[![Dot Net Framework 4.6.2 (Build)](https://github.com/gabrielcerutti/log4net.Appender.Loki/actions/workflows/netframework.build.yml/badge.svg)](https://github.com/gabrielcerutti/log4net.Appender.Loki/actions/workflows/netframework.build.yml)
 
 ## Installation
 
