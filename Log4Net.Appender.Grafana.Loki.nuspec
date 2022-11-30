@@ -2,14 +2,14 @@
 <package >
   <metadata>
     <id>$id$</id>
-    <version>0.1.3</version>
+    <version>0.1.4</version>
     <title>$title$</title>
     <authors>Gabriel Cerutti</authors>
     <owners>Gabriel Cerutti</owners>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <license type="expression">Apache-2.0</license>
     <projectUrl>https://github.com/gabrielcerutti/log4net.Appender.Loki</projectUrl>
-    <description>This appender will allow log4net to be configured to send log messages to Grafana Loki directly.</description>
+    <description>Log4Net buffering appender to send log messages to Grafana Loki directly using Loki Api (POST /loki/api/v1/push) and GZip compression.</description>
     <!--releaseNotes>Summary of changes made in this release of the package.</releaseNotes-->
     <copyright>Copyright 2022</copyright>
     <tags>log4net appender grafana loki</tags>
