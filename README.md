@@ -10,7 +10,7 @@ The log4net.Appender.LokiAppender NuGet [package can be found here](https://www.
 
 NuGet command:
 ```bash
-Install-Package log4net.Appender.Loki
+Install-Package Log4Net.Appender.Loki
 ```
 
 ## Log4net configuration
@@ -20,11 +20,14 @@ Sample Log4net config:
 ```xml
 <log4net>
   <appender name="loki" type="log4net.Appender.LokiAppender, log4net.Appender.Loki">
+    <Environment value="Development" /> <!-- Global label to be added to the log stream -->
+    <Application value="WebApp" /> <!-- Global label to be added to the log stream -->
     <BufferSize  value="3" /> <!-- To configure the buffer size, default: 512 -->
     <ServiceUrl value="http://localhost:3100" /> <!-- Loki URL -->
     <BasicAuthUserName value="username" /> <!-- To be added if basic authent enabled  -->
     <BasicAuthPassword value="password" /> <!-- To be added if basic authent enabled  -->
-    <TrustSelfCignedCerts value="false" /> <!-- To trust self signed certificates. Default: false -->
+    <GZipCompression value="true" /> <!-- To compress the post request using GZip compression -->
+    <TrustSelfSignedCerts value="false" /> <!-- To trust self signed certificates. Default: false -->
   </appender>
 </log4net>
 ```
