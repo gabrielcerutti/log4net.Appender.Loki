@@ -14,10 +14,10 @@ namespace Log4Net.Appender.Loki
         {
             if (trustSelfSignedCerts)
             {
-                var handler = new WebRequestHandler();
-                handler.ServerCertificateValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) =>
-                {
-                    return true;
+                var handler = new WebRequestHandler {
+                    ServerCertificateValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) => {
+                        return true;
+                    } 
                 };
                 HttpClient = new HttpClient(handler);
             }
