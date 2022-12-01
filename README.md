@@ -1,6 +1,12 @@
 # Log4Net Grafana Loki Appender
 
-This appender will allow *log4net* to be configured to send log messages to Loki directly.
+This appender will allow *log4net* to be configured to send log messages to Loki directly, some features this library supports:
+
+ - JSON format
+ - Buffering
+ - Basic Authentication
+ - GZip Compression
+ - Using the latest Loki HTTP API [POST /loki/api/v1/push](https://grafana.com/docs/loki/latest/api/#push-log-entries-to-loki).
 
 [![Dot Net Framework 4.6.2 (Build)](https://github.com/gabrielcerutti/log4net.Appender.Loki/actions/workflows/netframework.build.yml/badge.svg)](https://github.com/gabrielcerutti/log4net.Appender.Loki/actions/workflows/netframework.build.yml)
 
@@ -19,7 +25,7 @@ Sample Log4net config:
 
 ```xml
 <log4net>
-  <appender name="loki" type="Log4Net.Appender.LokiAppender, Log4Net.Appender.Grafana.Loki">
+  <appender name="loki" type="Log4Net.Appender.Loki.LokiAppender, Log4Net.Appender.Grafana.Loki">
     <Environment value="Development" /> <!-- Global label to be added to the log stream -->
     <Application value="WebApp" /> <!-- Global label to be added to the log stream -->
     <BufferSize  value="3" /> <!-- To configure the buffer size, default: 512 -->

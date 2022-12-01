@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 
 namespace Example
@@ -13,7 +10,6 @@ namespace Example
 
         static void Main(string[] args)
         {
-            // or wherever your file is
             var fileInfo = new FileInfo(AppDomain.CurrentDomain.BaseDirectory + "log4net.config");
             if (fileInfo.Exists)
                 log4net.Config.XmlConfigurator.Configure(fileInfo);
@@ -25,7 +21,11 @@ namespace Example
             while (true)
             {
                 Thread.Sleep(2000);
+                logger.Debug($"Log number {count++}");
                 logger.Info($"Log number { count++ }");
+                logger.Warn($"Log number {count++}");
+                logger.Error($"Log number {count++}");
+                logger.Fatal($"Log number {count++}");
             }
         }
     }
