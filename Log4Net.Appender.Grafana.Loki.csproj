@@ -2,13 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>9.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Example.NetCore\**" />
     <Compile Remove="Example\**" />
     <Compile Remove="packages\**" />
+    <EmbeddedResource Remove="Example.NetCore\**" />
     <EmbeddedResource Remove="Example\**" />
     <EmbeddedResource Remove="packages\**" />
+    <None Remove="Example.NetCore\**" />
     <None Remove="Example\**" />
     <None Remove="packages\**" />
   </ItemGroup>
