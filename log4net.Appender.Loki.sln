@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32516.85
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Log4Net.Appender.Grafana.Loki", "Log4Net.Appender.Grafana.Loki.csproj", "{D2DD78D6-396A-4F1E-8D5E-0F7D4F8463EB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example", "Example\Example.csproj", "{D321E3CB-4D2B-4383-8F5A-2B0E65C332B8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Log4Net.Appender.Grafana.Loki", "Log4Net.Appender.Grafana.Loki.csproj", "{ECD5CCA2-E1C6-4534-8236-C47261118867}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D2DD78D6-396A-4F1E-8D5E-0F7D4F8463EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D2DD78D6-396A-4F1E-8D5E-0F7D4F8463EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D2DD78D6-396A-4F1E-8D5E-0F7D4F8463EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D2DD78D6-396A-4F1E-8D5E-0F7D4F8463EB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D321E3CB-4D2B-4383-8F5A-2B0E65C332B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D321E3CB-4D2B-4383-8F5A-2B0E65C332B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D321E3CB-4D2B-4383-8F5A-2B0E65C332B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D321E3CB-4D2B-4383-8F5A-2B0E65C332B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECD5CCA2-E1C6-4534-8236-C47261118867}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECD5CCA2-E1C6-4534-8236-C47261118867}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECD5CCA2-E1C6-4534-8236-C47261118867}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECD5CCA2-E1C6-4534-8236-C47261118867}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

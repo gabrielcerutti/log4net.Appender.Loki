@@ -64,7 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Log4Net.Appender.Grafana.Loki.csproj">
-      <Project>{d2dd78d6-396a-4f1e-8d5e-0f7d4f8463eb}</Project>
+      <Project>{ecd5cca2-e1c6-4534-8236-c47261118867}</Project>
       <Name>Log4Net.Appender.Grafana.Loki</Name>
     </ProjectReference>
   </ItemGroup>
