@@ -6,8 +6,11 @@
 
   <ItemGroup>
     <Compile Remove="Example\**" />
+    <Compile Remove="packages\**" />
     <EmbeddedResource Remove="Example\**" />
+    <EmbeddedResource Remove="packages\**" />
     <None Remove="Example\**" />
+    <None Remove="packages\**" />
   </ItemGroup>
 
   <ItemGroup>
