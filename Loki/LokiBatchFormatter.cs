@@ -12,6 +12,7 @@ namespace Log4Net.Appender.Loki
     {
         private readonly IList<LokiLabel> _globalLabels;
         private readonly IList<LokiProperty> _globalProperties;
+        private static readonly string LabelPrefixe = "Label__";
 
         public LokiBatchFormatter()
         {
@@ -138,15 +139,23 @@ namespace Log4Net.Appender.Loki
                 SerializeException(output, logEvent.ExceptionObject, 1);
             }
 
-            if (logEvent.Properties.Count > 0)
+            var propertiesLabelList = logEvent.Properties.GetKeys().Where(k => k.StartsWith(LabelPrefixe)).ToArray();
+            if (propertiesLabelList.Any())
+            {
+                var dynamicLabels = propertiesLabelList.Select(p => new LokiLabel { Key = p.Substring(LabelPrefixe.Count()), Value = logEvent.Properties[p].ToString() });
+                foreach (LokiLabel l in dynamicLabels)
+                    stream.Labels.Add(l.Key, l.Value);
+            }
+
+            var propertiesList = logEvent.Properties.GetKeys().Where(k => !k.StartsWith(LabelPrefixe)).ToArray();
+            if (propertiesList.Any())
             {
                 output.Write(",\"Properties\":{");
-                var propertiesKeys = logEvent.Properties.GetKeys();
-                var count = propertiesKeys.Count();
+                var count = propertiesList.Count();
                 for (var i = 0; i < count; i++)
                 {
                     var isLast = i == count - 1;
-                    var key = propertiesKeys[i];
+                    var key = propertiesList[i];
                     output.Write(string.Format("\"{0}\":{1}", key, JsonConvert.ToString(logEvent.Properties[key].ToString())));
                     if (!isLast)
                     {
