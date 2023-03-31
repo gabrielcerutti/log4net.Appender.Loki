@@ -34,6 +34,10 @@ Sample Log4net config:
     <BasicAuthPassword value="password" /> <!-- To be added if basic authent enabled  -->
     <GZipCompression value="true" /> <!-- To compress the post request using GZip compression -->
     <TrustSelfSignedCerts value="false" /> <!-- To trust self signed certificates. Default: false -->
+    <Label> <!-- Add custom label -->
+			<Key value="apiGroup" />
+			<Value value="group1" />
+		</Label>
   </appender>
 </log4net>
 ```
