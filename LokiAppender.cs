@@ -1,5 +1,6 @@
 ﻿using log4net.Appender;
 using log4net.Core;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
@@ -17,16 +18,19 @@ namespace Log4Net.Appender.Loki
         public string BasicAuthPassword { get; set; }
         public bool GZipCompression { get; set; }
         public bool TrustSelfSignedCerts { get; set; }
+        public LokiLabel Label { set { Labels.Add(value); } }
+        private List<LokiLabel> Labels = new List<LokiLabel>();
 
         private void PostLoggingEvent(LoggingEvent[] loggingEvents)
         {
-            var labels = new LokiLabel[] {
-                new LokiLabel("Application", Application),
-                new LokiLabel("Environment", Environment)
+            var labels = new List<LokiLabel>(Labels)
+            {
+                new LokiLabel { Key = "Application", Value = Application },
+                new LokiLabel { Key = "Environment", Value = Environment }
             };
             var properties = new LokiProperty[] {
-                new LokiProperty("MachineName", System.Environment.MachineName),
-                new LokiProperty("ProcessName", Process.GetCurrentProcess().ProcessName)
+                new LokiProperty { Key = "MachineName", Value = System.Environment.MachineName },
+                new LokiProperty { Key = "ProcessName", Value = Process.GetCurrentProcess().ProcessName }
             };
             var formatter = new LokiBatchFormatter(labels, properties);
             var httpClient = new LokiHttpClient(TrustSelfSignedCerts);
