@@ -41,3 +41,12 @@ Sample Log4net config:
   </appender>
 </log4net>
 ```
+
+## Dynamic label
+
+You can add dynamic label before sending logs with a log4net propertie prefixed by 'Label__' :
+
+```cs
+ThreadContext.Properties["Label__api"] = "debug";
+_logger.LogInformation("This is a message");
+```
