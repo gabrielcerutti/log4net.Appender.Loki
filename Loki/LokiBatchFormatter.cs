@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace Log4Net.Appender.Loki
 {
@@ -48,53 +47,6 @@ namespace Log4Net.Appender.Loki
                 output.Write(content.Serialize());
         }
 
-        private LokiContentStream FormatLogEvent(LoggingEvent logEvent)
-        {
-            var stream = new LokiContentStream();
-
-            stream.Labels.Add("level", GetLevel(logEvent.Level));
-            foreach (LokiLabel globalLabel in _globalLabels)
-                stream.Labels.Add(globalLabel.Key, globalLabel.Value);
-
-            //foreach (var key in logEvent.Properties.GetKeys())
-            //{
-            //    // Some enrichers pass strings with quotes surrounding the values inside the string,
-            //    // which results in redundant quotes after serialization and a "bad request" response.
-            //    // To avoid this, remove all quotes from the value.
-            //    stream.Labels.Add(new LokiLabel(key, logEvent.Properties[key].ToString().Replace("\"", "")));
-            //}
-
-            var epoch = Math.Truncate((logEvent.TimeStampUtc - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds).ToString() + "000000";
-            var logMessage = new LokiEntry
-            {
-                Level = logEvent.Level.Name,
-                Message = logEvent.RenderedMessage,
-                SourceContext = logEvent.LoggerName,
-                Location = logEvent.LocationInformation.FullInfo
-            };
-            foreach (var property in _globalProperties)
-            {
-                logMessage.Properties.Add(property.Key, property.Value);
-            }
-
-            if (logEvent.ExceptionObject != null)
-            {
-                var exceptionOutput = new StringWriter();
-                SerializeException(exceptionOutput, logEvent.ExceptionObject, 1);
-                logMessage.Properties.Add("Exception", exceptionOutput.ToString());
-            }
-            var dataAsJson = JsonConvert.SerializeObject(logMessage);
-            var sb = new StringBuilder();
-            sb.AppendLine(dataAsJson);
-
-            stream.Values.Add(new string[2] {
-                    epoch.ToString(),
-                    sb.ToString()
-                });
-
-            return stream;
-        }
-
         private LokiContentStream FormatLogEventToJson(LoggingEvent logEvent)
         {
             if (logEvent == null)
@@ -105,7 +57,7 @@ namespace Log4Net.Appender.Loki
             var output = new StringWriter();
             var stream = new LokiContentStream();
 
-            stream.Labels.Add("level", GetLevel(logEvent.Level));
+            stream.Labels.Add("level", logEvent.Level.ToGrafanaLogLevel());
             foreach (LokiLabel globalLabel in _globalLabels)
                 stream.Labels.Add(globalLabel.Key, globalLabel.Value);
 
@@ -164,14 +116,6 @@ namespace Log4Net.Appender.Loki
                 });
 
             return stream;
-        }
-
-        private static string GetLevel(Level level)
-        {
-            if (level == Level.Info)
-                return "info";
-
-            return level.ToString().ToLower();
         }
 
         private void SerializeException(StringWriter output, Exception exception, int level)

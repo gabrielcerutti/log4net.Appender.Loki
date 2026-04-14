@@ -1,15 +1,20 @@
-﻿using log4net.Appender;
+using log4net.Appender;
 using log4net.Core;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace Log4Net.Appender.Loki
 {
     public class LokiAppender : BufferingAppenderSkeleton
     {
+        private static readonly string _processName = Process.GetCurrentProcess().ProcessName;
+        private LokiHttpClient _httpClient;
+
         public string Application { get; set; }
         public string Environment { get; set; }
         public string ServiceUrl { get; set; }
@@ -18,58 +23,81 @@ namespace Log4Net.Appender.Loki
         public bool GZipCompression { get; set; }
         public bool TrustSelfSignedCerts { get; set; }
 
+        public override void ActivateOptions()
+        {
+            base.ActivateOptions();
+
+            if (string.IsNullOrEmpty(ServiceUrl))
+            {
+                ErrorHandler.Error("LokiAppender requires a non-empty ServiceUrl.");
+                return;
+            }
+
+            LokiCredentials credentials = !string.IsNullOrEmpty(BasicAuthUserName) && !string.IsNullOrEmpty(BasicAuthPassword)
+                ? new BasicAuthCredentials(ServiceUrl, BasicAuthUserName, BasicAuthPassword)
+                : (LokiCredentials)new NoAuthCredentials(ServiceUrl);
+
+            _httpClient = new LokiHttpClient(TrustSelfSignedCerts);
+            _httpClient.SetAuthCredentials(credentials);
+        }
+
+        protected override void OnClose()
+        {
+            base.OnClose();
+            _httpClient?.Dispose();
+        }
+
+        protected override void SendBuffer(LoggingEvent[] events)
+        {
+            PostLoggingEvent(events);
+        }
+
         private void PostLoggingEvent(LoggingEvent[] loggingEvents)
         {
+            if (_httpClient == null)
+                return;
+
             var labels = new LokiLabel[] {
                 new LokiLabel("Application", Application),
                 new LokiLabel("Environment", Environment)
             };
             var properties = new LokiProperty[] {
                 new LokiProperty("MachineName", System.Environment.MachineName),
-                new LokiProperty("ProcessName", Process.GetCurrentProcess().ProcessName)
+                new LokiProperty("ProcessName", _processName)
             };
             var formatter = new LokiBatchFormatter(labels, properties);
-            var httpClient = new LokiHttpClient(TrustSelfSignedCerts);
 
-            if (httpClient is LokiHttpClient c)
-            {
-                LokiCredentials credentials;
-
-                if (!string.IsNullOrEmpty(BasicAuthUserName) && !string.IsNullOrEmpty(BasicAuthPassword))
-                {
-                    credentials = new BasicAuthCredentials(ServiceUrl, BasicAuthUserName, BasicAuthPassword);
-                }
-                else
-                {
-                    credentials = new NoAuthCredentials(ServiceUrl);
-                }
-
-                c.SetAuthCredentials(credentials);
-            }
-
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             using (var sc = new StringWriter(sb))
             {
                 formatter.Format(loggingEvents, sc);
                 sc.Flush();
-                var loggingEventsStr = sb.ToString();
+            }
+            var loggingEventsStr = sb.ToString();
+
+            try
+            {
+                HttpResponseMessage response;
                 if (GZipCompression)
                 {
                     var compressedContent = CompressRequestContent(loggingEventsStr);
-                    httpClient.PostAsync(LokiRouteBuilder.BuildPostUri(ServiceUrl), compressedContent);
+                    response = _httpClient.PostAsync(LokiRouteBuilder.BuildPostUri(ServiceUrl), compressedContent).GetAwaiter().GetResult();
                 }
                 else
                 {
                     var content = new StreamContent(new MemoryStream(Encoding.UTF8.GetBytes(loggingEventsStr)));
-                    //var contentStr = content.ReadAsStringAsync().Result; // TO VERIFY                
-                    httpClient.PostAsync(LokiRouteBuilder.BuildPostUri(ServiceUrl), content);
+                    response = _httpClient.PostAsync(LokiRouteBuilder.BuildPostUri(ServiceUrl), content).GetAwaiter().GetResult();
+                }
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    ErrorHandler.Error($"Failed to send log events to Loki. Status: {(int)response.StatusCode} {response.ReasonPhrase}");
                 }
             }
-        }
-
-        protected override void SendBuffer(LoggingEvent[] events)
-        {
-            PostLoggingEvent(events);
+            catch (Exception ex)
+            {
+                ErrorHandler.Error("Error sending log events to Loki.", ex);
+            }
         }
 
         private static HttpContent CompressRequestContent(string content)
@@ -84,7 +112,8 @@ namespace Log4Net.Appender.Loki
             }
 
             var httpContent = new ByteArrayContent(compressedStream.ToArray());
-            httpContent.Headers.Add("Content-encoding", "gzip");
+            httpContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+            httpContent.Headers.Add("Content-Encoding", "gzip");
             return httpContent;
         }
     }
