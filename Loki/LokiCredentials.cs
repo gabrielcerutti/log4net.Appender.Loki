@@ -1,8 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.IO;
-
-namespace Log4Net.Appender.Loki
+﻿namespace Log4Net.Appender.Loki
 {
     public class NoAuthCredentials : LokiCredentials
     {
