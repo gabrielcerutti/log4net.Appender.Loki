@@ -13,23 +13,30 @@ jobs:
     - name: Checkout the repository
       uses: actions/checkout@v4
 
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '6.0.x'
+
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v2
 
     - name: Restore NuGet Packages
-      run: nuget restore log4net.Appender.Loki.sln
-
-    - name: Setup MSBuild Path
-      uses: microsoft/setup-msbuild@v2
+      run: dotnet restore log4net.Appender.Loki.sln
 
     - name: Build
-      run: msbuild Log4Net.Appender.Grafana.Loki.csproj /p:Configuration=Release
+      run: dotnet build Log4Net.Appender.Grafana.Loki.csproj -c Release --no-restore
 
-    - name: Create NuGet Package
-      run: nuget pack Log4Net.Appender.Grafana.Loki.csproj -OutputDirectory ./artifact -Prop Configuration=Release
+    - name: Pack NuGet Package
+      run: dotnet pack Log4Net.Appender.Grafana.Loki.csproj -c Release --no-build -o ./artifact
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: artifact
         path: ./artifact
+
+    - name: Publish to NuGet
+      run: dotnet nuget push ./artifact/*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
+      env:
+        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}

@@ -1,0 +1,39 @@
+name: Publish to NuGet
+
+on:
+  push:
+    tags:
+      - 'v*' # Trigger on version tags like v1.0.0, v2.1.0, etc.
+  workflow_dispatch: # Manual trigger
+
+jobs:
+  publish:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '6.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore Log4Net.Appender.Grafana.Loki.csproj
+
+    - name: Build project
+      run: dotnet build Log4Net.Appender.Grafana.Loki.csproj -c Release --no-restore /p:TreatWarningsAsErrors=false
+
+    - name: Pack NuGet package
+      run: dotnet pack Log4Net.Appender.Grafana.Loki.csproj -c Release --no-build -o ./nupkg
+
+    - name: Upload NuGet package artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: nuget-package
+        path: ./nupkg/*.nupkg
+
+    - name: Publish to NuGet.org
+      run: dotnet nuget push ./nupkg/*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
+      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
