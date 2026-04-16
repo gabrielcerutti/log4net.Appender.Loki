@@ -36,7 +36,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="LICENSE" />
+    <None Include=".github\workflows\netframework.build.yml" />
+    <None Include=".github\workflows\netframework.release.yml" />
     <None Include=".github\workflows\nuget-publish.yml" />
     <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
