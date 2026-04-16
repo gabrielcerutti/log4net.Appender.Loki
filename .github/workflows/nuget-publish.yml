@@ -25,8 +25,18 @@ jobs:
     - name: Build project
       run: dotnet build Log4Net.Appender.Grafana.Loki.csproj -c Release --no-restore /p:TreatWarningsAsErrors=false
 
+    - name: Determine version
+      id: version
+      shell: pwsh
+      run: |
+        if ($env:GITHUB_REF -match '^refs/tags/v(.+)$') {
+          echo "VERSION=$($Matches[1])" >> $env:GITHUB_OUTPUT
+        } else {
+          echo "VERSION=0.0.0-dev" >> $env:GITHUB_OUTPUT
+        }
+
     - name: Pack NuGet package
-      run: dotnet pack Log4Net.Appender.Grafana.Loki.csproj -c Release --no-build -o ./nupkg
+      run: dotnet pack Log4Net.Appender.Grafana.Loki.csproj -c Release --no-build -o ./nupkg /p:Version=${{ steps.version.outputs.VERSION }}
 
     - name: Upload NuGet package artifact
       uses: actions/upload-artifact@v4

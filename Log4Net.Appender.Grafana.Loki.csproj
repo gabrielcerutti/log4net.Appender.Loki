@@ -3,10 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>9.0</LangVersion>
+    <Version>1.1.0</Version>
 
     <!-- NuGet Package Metadata -->
     <PackageId>Log4Net.Appender.Grafana.Loki</PackageId>
-    <Authors>Anas El Hajjaji,Gabriel Cerutti</Authors>
+    <Authors>Gabriel Cerutti</Authors>
     <Company>Log4Net.Appender.Grafana.Loki</Company>
     <Product>Log4Net.Appender.Grafana.Loki</Product>
     <Description>Log4net appender for Grafana Loki with support for JSON format, buffering, basic authentication, and GZip compression</Description>
