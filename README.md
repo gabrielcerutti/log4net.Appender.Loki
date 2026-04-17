@@ -29,6 +29,7 @@ A high-performance log4net appender that sends log messages directly to [Grafana
 - **✅ GZip Compression** - Reduce bandwidth usage with automatic compression
 - **✅ SSL/TLS Support** - Option to trust self-signed certificates for development
 - **✅ Global Labels** - Add custom labels (environment, application name, etc.) to all log streams
+- **✅ Dynamic Labels** - Declare any number of extra custom labels directly from your `log4net.config`
 - **✅ Cross-Platform** - Supports .NET Framework 4.6.2+, .NET Core, and .NET 5+
 
 ## 🔧 Compatibility
@@ -123,6 +124,7 @@ Your logs will appear in Grafana Loki with labels:
 | `ServiceUrl` | string | *Required* | Loki server URL (e.g., `http://localhost:3100`) |
 | `Application` | string | `null` | Global label for application name |
 | `Environment` | string | `null` | Global label for environment (Dev, Staging, Production) |
+| `Label` | LokiLabel | `null` | Extra custom label added to all log streams (repeatable) |
 | `BufferSize` | int | `512` | Number of log entries to buffer before sending |
 
 ### Advanced Configuration
@@ -136,6 +138,16 @@ Your logs will appear in Grafana Loki with labels:
     <!-- Global Labels -->
     <Application value="MyWebApp" />
     <Environment value="Production" />
+
+    <!-- Extra Custom Labels (repeatable) -->
+    <Label>
+      <Key value="Team" />
+      <Value value="Backend" />
+    </Label>
+    <Label>
+      <Key value="Region" />
+      <Value value="eu-west-1" />
+    </Label>
 
     <!-- Performance -->
     <BufferSize value="100" />
@@ -180,6 +192,20 @@ Adds a custom `environment` label to all log streams.
 <Environment value="Staging" />
 <Environment value="Production" />
 ```
+
+#### `Label`
+Adds an extra custom label to all log streams. Can be specified **multiple times** to add as many labels as needed. Each `<Label>` element requires a `Key` and a `Value` child element.
+```xml
+<Label>
+  <Key value="Team" />
+  <Value value="Backend" />
+</Label>
+<Label>
+  <Key value="Region" />
+  <Value value="eu-west-1" />
+</Label>
+```
+All configured labels (including `Application`, `Environment`, and any `Label` entries) will appear on every log stream sent to Loki, making them available for filtering in Grafana.
 
 #### `BufferSize`
 Number of log entries to accumulate before sending to Loki. Higher values reduce network calls but increase memory usage.

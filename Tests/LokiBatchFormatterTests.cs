@@ -108,5 +108,37 @@ namespace Log4Net.Appender.Grafana.Loki.Tests
             Assert.Contains("first", json);
             Assert.Contains("second", json);
         }
+
+        [Fact]
+        public void Format_MultipleCustomLabels_AllAppearInStream()
+        {
+            var labels = new[]
+            {
+                new LokiLabel("Application", "MyApp"),
+                new LokiLabel("Team", "Backend"),
+                new LokiLabel("Region", "eu-west-1")
+            };
+            var formatter = new LokiBatchFormatter(labels, Array.Empty<LokiProperty>());
+            var sb = new System.Text.StringBuilder();
+            using var writer = new StringWriter(sb);
+            formatter.Format(new[] { MakeEvent(Level.Info, "test") }, writer);
+            var json = sb.ToString();
+            Assert.Contains("MyApp", json);
+            Assert.Contains("Backend", json);
+            Assert.Contains("eu-west-1", json);
+        }
+
+        [Fact]
+        public void Format_CustomLabelKeyAndValue_BothAppearInStream()
+        {
+            var labels = new[] { new LokiLabel("Region", "us-east-1") };
+            var formatter = new LokiBatchFormatter(labels, Array.Empty<LokiProperty>());
+            var sb = new System.Text.StringBuilder();
+            using var writer = new StringWriter(sb);
+            formatter.Format(new[] { MakeEvent(Level.Info, "test") }, writer);
+            var json = sb.ToString();
+            Assert.Contains("Region", json);
+            Assert.Contains("us-east-1", json);
+        }
     }
 }

@@ -1,6 +1,7 @@
 using log4net.Appender;
 using log4net.Core;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
@@ -14,6 +15,7 @@ namespace Log4Net.Appender.Loki
     {
         private static readonly string _processName = Process.GetCurrentProcess().ProcessName;
         private LokiHttpClient _httpClient;
+        internal readonly List<LokiLabel> _labels = new List<LokiLabel>();
 
         public string Application { get; set; }
         public string Environment { get; set; }
@@ -22,6 +24,11 @@ namespace Log4Net.Appender.Loki
         public string BasicAuthPassword { get; set; }
         public bool GZipCompression { get; set; }
         public bool TrustSelfSignedCerts { get; set; }
+
+        /// <summary>
+        /// Allows extra labels to be configured via log4net XML config. Can be specified multiple times.
+        /// </summary>
+        public LokiLabel Label { set { _labels.Add(value); } }
 
         public override void ActivateOptions()
         {
@@ -57,7 +64,8 @@ namespace Log4Net.Appender.Loki
             if (_httpClient == null)
                 return;
 
-            var labels = new LokiLabel[] {
+            var labels = new List<LokiLabel>(_labels)
+            {
                 new LokiLabel("Application", Application),
                 new LokiLabel("Environment", Environment)
             };
