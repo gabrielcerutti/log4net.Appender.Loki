@@ -10,6 +10,9 @@ on:
 jobs:
   publish:
     runs-on: windows-latest
+    permissions:
+      packages: write
+      contents: read
 
     steps:
     - name: Checkout repository
@@ -58,3 +61,12 @@ jobs:
         if (-not $pkg) { Write-Error "No .nupkg file found in ./nupkg"; exit 1 }
         Write-Host "Publishing $($pkg.FullName)"
         dotnet nuget push $pkg.FullName -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
+
+    - name: Publish to GitHub Packages
+      shell: pwsh
+      if: github.event_name == 'push'
+      run: |
+        $pkg = Get-ChildItem -Path ./nupkg -Filter *.nupkg | Select-Object -First 1
+        if (-not $pkg) { Write-Error "No .nupkg file found in ./nupkg"; exit 1 }
+        Write-Host "Publishing $($pkg.FullName) to GitHub Packages"
+        dotnet nuget push $pkg.FullName -k ${{ secrets.GITHUB_TOKEN }} -s https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --skip-duplicate
